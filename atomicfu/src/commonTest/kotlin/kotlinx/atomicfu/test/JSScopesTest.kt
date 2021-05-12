@@ -23,6 +23,7 @@ class AA(val value: Int) {
 }
 
 class B (val value: Int)
+
 class C (val d: D)
 class D (val e: E)
 class E (val x: Int)
