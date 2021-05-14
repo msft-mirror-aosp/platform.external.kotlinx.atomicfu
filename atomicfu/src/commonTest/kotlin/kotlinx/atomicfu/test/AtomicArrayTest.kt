@@ -11,7 +11,6 @@ class ArrayTest {
     @Test
     fun testIntArray() {
         val A = AtomicArrayClass()
-        check(A.intArr.size == 10)
         check(A.intArr[0].compareAndSet(0, 3))
         check(A.intArr[1].value == 0)
         A.intArr[0].lazySet(5)
@@ -23,17 +22,11 @@ class ArrayTest {
         check(A.intArr[2].value == 2)
         check(A.intArr[2].compareAndSet(2, 34))
         check(A.intArr[2].value == 34)
-        assertEquals(20, A.intArr.size + A.longArr.size)
-        val size = A.intArr.size
-        var sum = 0
-        for (i in 0 until size) { sum += A.intArr[i].value }
-        assertEquals(43, sum)
     }
 
     @Test
     fun testLongArray() {
         val A = AtomicArrayClass()
-        check(A.longArr.size == 10)
         A.longArr[0].value = 2424920024888888848
         check(A.longArr[0].value == 2424920024888888848)
         A.longArr[0].lazySet(8424920024888888848)
@@ -64,7 +57,6 @@ class ArrayTest {
     @Test
     fun testBooleanArray() {
         val A = AtomicArrayClass()
-        check(A.booleanArr.size == 10)
         check(!A.booleanArr[1].value)
         A.booleanArr[1].compareAndSet(false, true)
         A.booleanArr[0].lazySet(true)
@@ -77,10 +69,8 @@ class ArrayTest {
     @Test
     fun testRefArray() {
         val A = AtomicArrayClass()
-        check(A.refArr.size == 10)
-        check(A.genericArr.size == 10)
-        val a2 = IntBox(2)
-        val a3 = IntBox(3)
+        val a2 = ARef(2)
+        val a3 = ARef(3)
         A.refArr[0].value = a2
         check(A.refArr[0].value!!.n == 2)
         check(A.refArr[0].compareAndSet(a2, a3))
@@ -104,12 +94,6 @@ class ArrayTest {
         val ea = ExtendedApiAtomicArrays()
         check(ea.stringAtomicNullArray[0].value == null)
         check(ea.stringAtomicNullArray[0].compareAndSet(null, "aaa"))
-        val totalString = buildString {
-            for (i in 0 until ea.stringAtomicNullArray.size) {
-                ea.stringAtomicNullArray[i].value?.let { append(it) }
-            }
-        }
-        assertEquals("aaa", totalString)
 
         check(ea.genAtomicNullArr[3].value == null)
         val l1 = listOf("a", "bb", "ccc")
@@ -128,11 +112,11 @@ class AtomicArrayClass {
     val intArr = AtomicIntArray(10)
     val longArr = AtomicLongArray(10)
     val booleanArr = AtomicBooleanArray(10)
-    val refArr = AtomicArray<IntBox>(10)
+    val refArr = AtomicArray<ARef>(10)
     val genericArr = AtomicArray<List<List<String>>>(10)
     val mapArr = atomicArrayOfNulls<Map<List<String>, String>>(10)
     val anyArr = atomicArrayOfNulls<Any?>(10)
-    val a = atomic(IntBox(8))
+    val a = atomic(ARef(8))
 }
 
 class ExtendedApiAtomicArrays {
@@ -140,5 +124,5 @@ class ExtendedApiAtomicArrays {
     val genAtomicNullArr = atomicArrayOfNulls<List<String>>(7)
 }
 
-data class IntBox(val n: Int)
+data class ARef(val n: Int)
 
