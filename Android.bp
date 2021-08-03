@@ -32,4 +32,8 @@ java_library {
         "-Xmulti-platform",
     ],
     visibility: ["//external/kotlinx.coroutines"],
+    apex_available: [
+        "//apex_available:platform",
+        "//apex_available:anyapex",
+    ],
 }
