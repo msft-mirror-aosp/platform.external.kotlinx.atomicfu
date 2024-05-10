@@ -31,7 +31,10 @@ java_library {
     kotlincflags: [
         "-Xmulti-platform",
     ],
-    visibility: ["//external/kotlinx.coroutines"],
+    visibility: [
+        "//external/kotlinx.coroutines",
+        "//prebuilts/sdk/current/androidx:__subpackages__",
+    ],
     apex_available: [
         "//apex_available:platform",
         "//apex_available:anyapex",
