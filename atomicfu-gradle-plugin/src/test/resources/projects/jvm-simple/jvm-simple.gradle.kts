@@ -15,6 +15,7 @@ apply(plugin = "kotlinx-atomicfu")
 
 repositories {
     mavenCentral()
+    (properties["kotlin_repo_url"] as? String)?.let { maven(it) }
 }
 
 dependencies {
@@ -23,6 +24,11 @@ dependencies {
 }
 
 kotlin {
+    java {
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+    }
+
     tasks.compileTestKotlin {
         doLast {
             file("$buildDir/test_compile_jvm_classpath.txt").writeText(
