@@ -1,5 +1,61 @@
 # Change log for kotlinx.atomicfu
 
+# Version 0.23.1
+
+* Updated Kotlin to 1.9.21 (#361).
+* Update to Kotlin 1.9.21 fixes regression with klib incompatibility (#365).
+
+# Version 0.23.0
+
+* Updated Kotlin to 1.9.20 (#361).
+* Updated Gradle version to 8.3.
+* Supported transformations for Native targets 🎉 (#363) .
+* Introduced WebAssembly target (`wasmJs` and `wasmWasi`) 🎉 (#334).
+* Improved integration testing for `atomicfu-gradle-plugin` (#345).
+* Updated implementation of native atomics (#336).
+* Got rid of `previous-compilation-data.bin` file in META-INF (#344).
+
+# Version 0.22.0
+
+* Updated Kotlin to 1.9.0 (#330).
+* Updated gradle version to 8.1 (#319).
+* Updated kotlinx.metadata version 0.7.0 (#327).
+* Conditionally removed targets that are removed after 1.9.20 (iosArm32, watchosX86). (#320).
+* Removed obsolete no longer supported kotlin.mpp.enableCompatibilityMetadataVariant (#326).
+* Complied with new compiler restriction on actual declaration annotations (#325).
+
+# Version 0.21.0
+
+* Updated Kotlin to 1.8.20.
+* Updated Gradle to 7.3 (#300).
+* Updated kotlinx.metadata version to 0.6.0 (#281).
+* Minimal supported KGP(1.7.0) and Gradle(7.0) versions are set since this release.
+* Removed JS Legacy configurations for KGP >= 1.9.0 (#296).
+* Fixed class duplication (from original and transformed directories) in Jar (#301).
+* Original class directories are not modified in case of compiler plugin application (#312).
+
+# Version 0.20.2
+
+* Fix for unresolved `kotlinx-atomicfu-runtime` dependency error (https://youtrack.jetbrains.com/issue/KT-57235),
+please see the corresponding PR for more comments (#290).
+
+# Version 0.20.1
+
+* Fixed passing `kotlinx-atomicfu-runtime` dependency to the runtime classpath (#283).
+* AV/LV set to 1.4 to be compatible with Gradle 7 (#287).
+* Enable cinterop commonization (#282).
+
+# Version 0.20.0
+
+* Update Kotlin to 1.8.10.
+* Support all official K/N targets (#275).
+
+# Version 0.19.0
+
+* Update Kotlin to 1.8.0.
+* Update LV to 1.8 (#270).
+* Prepare atomicfu for including to the Kotlin Aggregate build (#265).
+
 # Version 0.18.5
 
 * Support JVM IR compiler plugin (#246).
