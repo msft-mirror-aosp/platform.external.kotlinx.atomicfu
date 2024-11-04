@@ -2,17 +2,24 @@
  * Copyright 2017-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license.
  */
 
-@file:Suppress("NOTHING_TO_INLINE", "RedundantVisibilityModifier", "CanBePrimaryConstructorProperty")
+@file:Suppress(
+    "NOTHING_TO_INLINE",
+    "RedundantVisibilityModifier",
+    "CanBePrimaryConstructorProperty",
+    "INVISIBLE_REFERENCE",
+    "INVISIBLE_MEMBER"
+)
 
 package kotlinx.atomicfu
 
-import kotlin.native.concurrent.AtomicInt as KAtomicInt
-import kotlin.native.concurrent.AtomicLong as KAtomicLong
-import kotlin.native.concurrent.FreezableAtomicReference as KAtomicRef
+import kotlin.concurrent.AtomicInt as KAtomicInt
+import kotlin.concurrent.AtomicLong as KAtomicLong
+import kotlin.concurrent.AtomicReference as KAtomicRef
 import kotlin.native.concurrent.isFrozen
 import kotlin.native.concurrent.freeze
 import kotlin.reflect.KProperty
 import kotlinx.atomicfu.TraceBase.None
+import kotlin.internal.InlineOnly
 
 public actual fun <T> atomic(initial: T, trace: TraceBase): AtomicRef<T> = AtomicRef<T>(KAtomicRef(initial))
 public actual fun <T> atomic(initial: T): AtomicRef<T> = atomic(initial, None)
@@ -26,7 +33,7 @@ public actual fun atomic(initial: Boolean): AtomicBoolean = atomic(initial, None
 // ==================================== AtomicRef ====================================
 
 @Suppress("ACTUAL_WITHOUT_EXPECT")
-public actual value class AtomicRef<T> internal constructor(@PublishedApi internal val a: KAtomicRef<T>) {
+public actual class AtomicRef<T> internal constructor(@PublishedApi internal val a: KAtomicRef<T>) {
     public actual inline var value: T
         get() = a.value
         set(value) {
@@ -34,8 +41,10 @@ public actual value class AtomicRef<T> internal constructor(@PublishedApi intern
             a.value = value
         }
 
+    @InlineOnly
     public actual inline operator fun getValue(thisRef: Any?, property: KProperty<*>): T = value
 
+    @InlineOnly
     public actual inline operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) { this.value = value }
 
     public actual inline fun lazySet(value: T) {
@@ -53,7 +62,7 @@ public actual value class AtomicRef<T> internal constructor(@PublishedApi intern
         while (true) {
             val cur = a.value
             if (cur === value) return cur
-            if (a.compareAndSwap(cur, value) === cur) return cur
+            if (a.compareAndExchange(cur, value) === cur) return cur
         }
     }
 
@@ -63,7 +72,7 @@ public actual value class AtomicRef<T> internal constructor(@PublishedApi intern
 // ==================================== AtomicBoolean ====================================
 
 @Suppress("ACTUAL_WITHOUT_EXPECT")
-public actual value class AtomicBoolean internal constructor(@PublishedApi internal val a: KAtomicInt) {
+public actual class AtomicBoolean internal constructor(@PublishedApi internal val a: KAtomicInt) {
     public actual inline var value: Boolean
         get() = a.value != 0
         set(value) { a.value = if (value) 1 else 0 }
@@ -95,13 +104,15 @@ public actual value class AtomicBoolean internal constructor(@PublishedApi inter
 // ==================================== AtomicInt ====================================
 
 @Suppress("ACTUAL_WITHOUT_EXPECT")
-public actual value class AtomicInt internal constructor(@PublishedApi internal val a: KAtomicInt) {
+public actual class AtomicInt internal constructor(@PublishedApi internal val a: KAtomicInt) {
     public actual inline var value: Int
         get() = a.value
         set(value) { a.value = value }
 
+    @InlineOnly
     actual inline operator fun getValue(thisRef: Any?, property: KProperty<*>): Int = value
 
+    @InlineOnly
     public actual inline operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) { this.value = value }
 
     public actual inline fun lazySet(value: Int) { a.value = value }
@@ -133,7 +144,7 @@ public actual value class AtomicInt internal constructor(@PublishedApi internal 
 // ==================================== AtomicLong ====================================
 
 @Suppress("ACTUAL_WITHOUT_EXPECT")
-public actual value class AtomicLong internal constructor(@PublishedApi internal val a: KAtomicLong) {
+public actual class AtomicLong internal constructor(@PublishedApi internal val a: KAtomicLong) {
     public actual inline var value: Long
         get() = a.value
         set(value) { a.value = value }
@@ -155,12 +166,12 @@ public actual value class AtomicLong internal constructor(@PublishedApi internal
         }
     }
 
-    public actual inline fun getAndIncrement(): Long = a.addAndGet(1) - 1
-    public actual inline fun getAndDecrement(): Long = a.addAndGet(-1) + 1
+    public actual inline fun getAndIncrement(): Long = a.addAndGet(1L) - 1
+    public actual inline fun getAndDecrement(): Long = a.addAndGet(-1L) + 1
     public actual inline fun getAndAdd(delta: Long): Long = a.addAndGet(delta) - delta
     public actual inline fun addAndGet(delta: Long): Long = a.addAndGet(delta)
-    public actual inline fun incrementAndGet(): Long = a.addAndGet(1)
-    public actual inline fun decrementAndGet(): Long = a.addAndGet(-1)
+    public actual inline fun incrementAndGet(): Long = a.addAndGet(1L)
+    public actual inline fun decrementAndGet(): Long = a.addAndGet(-1L)
 
     public actual inline operator fun plusAssign(delta: Long) { getAndAdd(delta) }
     public actual inline operator fun minusAssign(delta: Long) { getAndAdd(-delta) }
