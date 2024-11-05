@@ -35,9 +35,9 @@ class JvmLegacyTransformationTest : BaseKotlinGradleTest("jvm-simple") {
         checkTaskOutcomes(
             executedTasks = listOf(
                 ":compileKotlin",
-                ":transformAtomicfuClasses",
+                ":transformMainAtomicfu",
                 ":compileTestKotlin",
-                ":transformTestAtomicfuClasses"
+                ":transformTestAtomicfu"
             ),
             excludedTasks = emptyList()
         )
@@ -46,7 +46,7 @@ class JvmLegacyTransformationTest : BaseKotlinGradleTest("jvm-simple") {
     fun testClasspath() {
         runner.build()
         checkJvmCompilationClasspath(
-            originalClassFile = "build/classes/kotlin/main/IntArithmetic.class",
+            originalClassFile = "build/classes/atomicfu-orig/main/IntArithmetic.class",
             transformedClassFile = "build/classes/atomicfu/main/IntArithmetic.class"
         )
     }
@@ -95,8 +95,8 @@ class JvmIrTransformationTest : BaseKotlinGradleTest("jvm-simple") {
                 ":compileTestKotlin"
             ),
             excludedTasks = listOf(
-                ":transformAtomicfuClasses",
-                ":transformTestAtomicfuClasses"
+                ":transformAtomicfu",
+                ":transformTestAtomicfu"
             )
         )
 

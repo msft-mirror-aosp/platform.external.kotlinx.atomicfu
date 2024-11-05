@@ -14,6 +14,7 @@ apply(plugin = "kotlinx-atomicfu")
 
 repositories {
     mavenCentral()
+    (properties["kotlin_repo_url"] as? String)?.let { maven(it) }
 }
 
 kotlin {
