@@ -39,7 +39,4 @@ java_library {
         "//apex_available:platform",
         "//apex_available:anyapex",
     ],
-    // atomicfu is used during compilation of the kotlin-incremental-client.
-    // It therefore can not itself be incremental.
-    kotlin_incremental: false,
 }
