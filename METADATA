@@ -15,6 +15,7 @@ third_party {
   identifier {
     type: "Git"
     value: "https://github.com/Kotlin/kotlinx.atomicfu"
-    version: "0.23.1"
+    version: "31c3c499a75bbf13eeed63024a74fba918c47798"
+    closest_version: "0.23.1"
   }
 }
